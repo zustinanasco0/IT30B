@@ -34,10 +34,10 @@ CREATE TABLE `books` (
   `book_id` int(11) NOT NULL AUTO_INCREMENT,
   `book_title` varchar(100) NOT NULL,
   `book_author` varchar(100) NOT NULL,
-  `book_category` varchar(100) NOT NULL,
+  `book_category` varchar(50) NOT NULL,
   `book_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,7 @@ CREATE TABLE `books` (
 
 LOCK TABLES `books` WRITE;
 /*!40000 ALTER TABLE `books` DISABLE KEYS */;
-INSERT INTO `books` VALUES (67,'tommorowXtogether','Zustin','Korean','0000-00-00 00:00:00');
+INSERT INTO `books` VALUES (1,'To Kill a Mockingbird','Harper Lee','Fiction','2026-08-26 11:20:26'),(2,'A Brief History of Time','Stephen Hawking','Science','2026-08-26 11:20:26'),(3,'Dune','Frank Herbert','Sci-Fi','2026-08-26 11:20:26');
 /*!40000 ALTER TABLE `books` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,6 +62,7 @@ CREATE TABLE `students` (
   `student_first_name` varchar(50) NOT NULL,
   `student_last_name` varchar(50) NOT NULL,
   `student_course` varchar(50) NOT NULL,
+  `student_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`student_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20240889 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -72,7 +73,7 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (20240888,'Zustin','Anasco','BSIT');
+INSERT INTO `students` VALUES (20240888,'Zustin','Anasco','BSIT','2026-08-26 02:18:47');
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -85,4 +86,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-08-25 19:17:08
+-- Dump completed on 2026-08-26 19:22:00
