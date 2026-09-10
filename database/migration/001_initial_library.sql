@@ -106,3 +106,13 @@ VALUES
  ('Reply 1988', 'Park Bo-gum', 'Family Comedy') ;
  ('Vincenzo', 'Song Joong-ki', 'Dark Comedy Crime') ;
  ('Business Proposal', 'Ahn Hyo-seop', 'Office Romance') ; 
+
+ --Insert statement  #3: Insert borrow
+ INSERT INTO borrow (
+    student_id,
+    book_id
+ )  VALUES 
+ 
+ (1,2) ;
+ (2,1) ;
+ 
