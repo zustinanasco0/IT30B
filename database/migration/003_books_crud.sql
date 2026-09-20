@@ -1,21 +1,53 @@
-DROP TABLE IF EXISTS `books`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `books` (
-  `book_id` int(11) NOT NULL AUTO_INCREMENT,
-  `book_title` varchar(100) NOT NULL,
-  `book_author` varchar(100) NOT NULL,
-  `book_category` varchar(50) NOT NULL,
-  `book_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    -- Book SQL #1
+    SELECT * FROM books;
 
---
--- Dumping data for table `books`
---
+    -- Book Query #2 - Select books order by id
+    SELECT * FROM books
+        ORDER BY book_id ASC;
+    
+    -- Book Query #3 - Select books order by id
+    SELECT * FROM books
+        ORDER BY book_id DESC;
+    
+    -- Book Query #4 - Select books order by book_title ASC
+    SELECT
+        book_title,
+        book_author
+        FROM books
+        ORDER BY book_title ASC;
+    
+    -- Book Query #5 - Select books order by book_title DESC
+    SELECT
+        book_title,
+        book_author
+        FROM books
+        ORDER BY book_title DESC;
+    
+    -- Book Query #6 - Select books order by book_title ASC
+    SELECT
+        book_author,
+        book_title
+        FROM books
+        ORDER BY book_title ASC;
 
-LOCK TABLES `books` WRITE;
-/*!40000 ALTER TABLE `books` DISABLE KEYS */;
-INSERT INTO `books` VALUES (1,'To Kill a Mockingbird','Harper Lee','Fiction','2026-08-26 11:20:26'),(2,'A Brief History of Time','Stephen Hawking','Science','2026-08-26 11:20:26'),(3,'Dune','Frank Herbert','Sci-Fi','2026-08-26 11:20:26');
-/*!40000 ALTER TABLE `books` ENABLE KEYS */;
+    -- Book Query #7 - Select books order by book_title DESC
+    SELECT
+        book_author,
+        book_title
+        FROM books
+        ORDER BY book_title DESC;
+    
+    -- Book Query #8 - Select books with specific id number
+    SELECT 
+        book_author,
+        book_title
+        FROM books
+        WHERE book_id = 3
+        LIMIT  1;
+
+    -- Book Query #9 - Update book title, author using specific id number
+    UPDATE books
+    SET
+        book_title = 'Oyoyara',
+        book_author = 'Shekles'
+        WHERE book_id = 3;
