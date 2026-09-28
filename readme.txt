@@ -16,4 +16,6 @@ mysqldump -u root -p --databases library_db > "C:\xampp\htdocs\IT30B-1\Backups\%
 
 mysqldump -u root -p --databases library_db > "C:\xampp\htdocs\IT30B\Backups\%date:~-4%%date:~3,2%%date:~0,2%_%time:~0,2%%time:~3,2%%time:~6,2%_library_db.sql"
 
-
+--added for the books--
+// Lines 127 to 220: the books PHP logic (fetch, create, update)
+Lines 381 to 481: the books HTML section (list table, create form, edit form)//
