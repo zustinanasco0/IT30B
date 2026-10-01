@@ -35,7 +35,7 @@ if($section === 'students'){
     $stmt = $pdo->query("   
         SELECT *
         FROM students
-        ORDER BY student_id DESC
+        ORDER BY student_id DESC 
     ");
 
     $students = $stmt->fetchAll();
@@ -105,7 +105,7 @@ $studentId = (int) ($_GET['id']) ?? 00;
           exit;
     }
 
-    // Retrieve student info by default
+    // ---------Retrieve student info by default---------//
 
     $stmt = $pdo->prepare("
     SELECT *
@@ -215,7 +215,122 @@ if($section==='books' && $action==='update'){
     if(!$book){
         die("Book Not Found");
     }
-}
+
+    // RETRIVE BORROW RECORDS
+    if($section==='borrow'){
+         //Retrieve students 
+         $stmt = $pdo-> prepare("
+         SELECT *
+             student_id,
+             student_first_name,
+                student_last_name,
+                FROM students
+            ORDER BY student_last_name, student_first_name
+
+
+            ");
+
+            $students = $stmt->fetchAll();
+
+            // Retrieve books
+
+            $stmt = $pdo->prepare("
+                SELECT 
+                book_id,
+                book_title,
+                book_author
+                FROM books
+                ORDER BY book_title
+            ");
+
+            $books = $stmt->fetchAll();
+ }
+
+
+
+
+
+
+    // CREATE BORROW
+    if($section==='borrow' && $action==='create'){
+
+        if($_SERVER['REQUEST_METHOD']==='POST'){
+
+            $studentId = (int) ($_POST['student_id'] ?? 00);
+            $bookId = (int) ($_POST['book_id'] ?? 00);
+
+
+        if($studentId !== 00 && $bookId !== 00){
+
+                $stmt = $pdo->prepare($sql);
+
+            $stmt = $pdo->prepare("
+            SELECT borrow_id
+            FROM borrow
+            WHERE student_id = ? 
+            AND borrow_returned_at IS NULL
+            LIMIT 1
+            ");
+            $stmt->execute([$studentId]);
+
+            $studentBorrow = $stmt->fetch();
+
+            if($studentBorrow){
+                $_SESSION['alert'] = "Student cannot borrow another book because a previous book has not been returned.";
+            }else{
+                //check if book is already borrowed
+                $stmt = $pdo->prepare("
+                SELECT borrow_id
+                FROM borrow
+                WHERE book_id = ?
+                AND borrow_returned_at IS NULL
+                LIMIT 1
+                ");
+                $stmt->execute([$borrowId]);
+
+                $bookBorrow = $stmt->fetch();
+
+                if($bookBorrow){
+                    $_SESSION['alert'] = "This book cannot be borrowed because it has not been returned.";
+
+                }else{
+                    //CREATE BORROW RECORD FINALLY!
+                    $stmt = $pdo->prepare("
+                        INSERT INTO borrow(
+                            student_id,
+                            book_id
+                        )
+                        VALUES(?,?)
+                    ");
+                    $stmt->execute(
+                        [$studentId,
+                        $bookId
+                        ]);
+
+                        $_SESSION['alert'] = "Book borrowed successfully!";
+                        
+                            }
+                        }
+                        header("Location: index.php?section=borrow");
+                        
+    exit; 
+            }
+                
+
+            }
+
+            
+
+            }
+        }
+
+
+
+
+
+
+
+ 
 
 ?>
 
@@ -478,7 +593,38 @@ if($section==='books' && $action==='update'){
 
     <?php if($section === 'borrow'):?>
         <h1>Borrow</h1>
+
+        <p>
+            <a href="index.php?section=borrow&action=create">
+              borrow a book
+            </a>
+
+        <p>
+
+        <?php if ($action==='create'): ?>
+            <h2>Borrow a Book</h2>
+
+            <form method="POST">
+
+               
+            </form>
+
     <?php endif; ?>
+
+    <?php endif; ?>
+
+            
+    
 </body>
+
+<?php if(isset($_SESSION['alert']) ) : ?>
+    <script>
+        alert(<?= json_encode($_SESSION['alert']) ?>);
+    </script>
+
+    <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
+
 </html>
+
 
