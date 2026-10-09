@@ -135,6 +135,24 @@ if($section === 'books'){
     $books = $stmt->fetchAll();
 }
 
+// Fetch borrow records  (ADDED)
+if($section === 'borrow'){
+    $stmt = $pdo->query("
+        SELECT
+            br.borrow_id,
+            CONCAT(s.student_first_name, ' ', s.student_last_name) AS student_name,
+            b.book_title,
+            br.borrow_date,
+            br.borrow_return_date
+        FROM borrow br
+        INNER JOIN students s ON br.student_id = s.student_id
+        INNER JOIN books b ON br.book_id = b.book_id
+        ORDER BY br.borrow_id DESC
+    ");
+
+    $borrows = $stmt->fetchAll();
+}
+
 // Create Book
 if($section==='books' && $action==='create'){
 
@@ -609,6 +627,34 @@ if($section==='books' && $action==='update'){
                
             </form>
 
+        <?php else: ?>
+            <!-- ADDED: borrow table -->
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student</th>
+                        <th>Book</th>
+                        <th>Borrow Date</th>
+                        <th>Return Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($borrows as $br): ?>
+                        <tr>
+                            <td><?=htmlspecialchars($br['borrow_id']) ?></td>
+                            <td><?=htmlspecialchars($br['student_name']) ?></td>
+                            <td><?=htmlspecialchars($br['book_title']) ?></td>
+                            <td><?=htmlspecialchars($br['borrow_date']) ?></td>
+                            <td><?=htmlspecialchars($br['borrow_return_date'] ?? 'Not returned') ?></td>
+                            <td>
+                                <a href="#">Return</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
     <?php endif; ?>
 
     <?php endif; ?>
@@ -626,5 +672,3 @@ if($section==='books' && $action==='update'){
 <?php endif; ?>
 
 </html>
-
-
