@@ -407,6 +407,7 @@ $action = $_GET['action'] ?? '';
                 <a href="index.php?section=students">
                     Cancel
                 </a>
+               
             </form>
 
         <?php elseif($action==='update'):?>
@@ -451,7 +452,7 @@ $action = $_GET['action'] ?? '';
             </form>
 
         <?php else: ?>
-            <table class="table table-bordered">
+            
             <thead>
                 <tr>
                     <th>ID</th>
