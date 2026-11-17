@@ -2,7 +2,7 @@
 
 // Database Connection
 $host = 'localhost';
-$db = 'it30b_lab_db';
+$db = 'it3b';
 $user = 'root';
 $pass = '';
 $charset = 'utf8mb4';
@@ -356,11 +356,18 @@ $action = $_GET['action'] ?? '';
 <body>
     <div class="container mt-4">
     <h1>Simple Library System</h1>
+
+     <a href="../../auth/signout.php" class="">
+            Sign Out
+        </a>
     <nav>
         <a href="index.php?section=students">Students</a>
         <a href="index.php?section=books">Books</a>
         <a href="index.php?section=borrow">Borrow</a>
+        
     </nav>
+
+     
     <hr>
     <?php if($section === 'students'):?>
         <h1>Students</h1>
@@ -407,7 +414,6 @@ $action = $_GET['action'] ?? '';
                 <a href="index.php?section=students">
                     Cancel
                 </a>
-               
             </form>
 
         <?php elseif($action==='update'):?>
@@ -452,7 +458,7 @@ $action = $_GET['action'] ?? '';
             </form>
 
         <?php else: ?>
-            
+            <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>ID</th>
