@@ -43,7 +43,31 @@ while ($row = $catStmt->fetch()) {
     $categoryCounts[] = (int) $row['cnt'];
 }
 
+$dailyStmt = $pdo->query("
+    SELECT DATE(borrow_date) AS day, COUNT(*) AS cnt
+    FROM borrow
+    WHERE borrow_date >= CURDATE() - INTERVAL 6 DAY
+    GROUP BY DATE(borrow_date)
+    ORDER BY day ASC
+");
 
+$borrowByDay = [];
+
+while ($row = $dailyStmt->fetch()) {
+    $borrowByDay[$row['day']] = (int) $row['cnt'];
+}
+
+// Generate labels and counts for the last 7 days
+
+$dayLabels = [];
+$dailyBorrows = [];
+
+for ($i = 6; $i >= 0; $i--) {
+    $date = date('Y-m-d', strtotime("-$i days"));
+
+    $dayLabels[] = date('D', strtotime($date));
+    $dailyBorrows[] = $borrowByDay[$date] ?? 0;
+}
 
 
 
@@ -359,7 +383,23 @@ while ($row = $catStmt->fetch()) {
         <canvas id="categoryChart" width="400" height="200"></canvas>
     </div>
 
+    <!-- Bar Chart: Borrow Activity -->
+<div class="chart-card">
+    <div class="chart-title">
+        Borrows · last 7 days
+
+        <span>
+            <span class="material-icons">trending_up</span>
+            activity
+        </span>
+    </div>
+
+    <canvas id="borrowChart" width="400" height="200"></canvas>
 </div>
+
+</div>
+
+
 <script>
     (function () {
         // Materialize standard palette
@@ -451,6 +491,82 @@ while ($row = $catStmt->fetch()) {
             }
         });
     })();
+
+    const borrowCtx = document
+    .getElementById('borrowChart')
+    .getContext('2d');
+
+new Chart(borrowCtx, {
+    type: 'bar',
+
+    data: {
+        labels: <?= json_encode($dayLabels) ?>,
+
+        datasets: [{
+            label: 'Borrows',
+            data: <?= json_encode($dailyBorrows) ?>,
+            backgroundColor: colors.blue,
+            borderRadius: 0, // Material flat bars are sharp
+
+            barPercentage: 0.6,
+            categoryPercentage: 0.8
+        }]
+    },
+
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+
+        plugins: {
+            legend: {
+                display: false
+            },
+
+            tooltip: {
+                backgroundColor: '#212121',
+                titleColor: '#ffffff',
+                bodyColor: '#ffffff',
+                padding: 10,
+                cornerRadius: 4,
+
+                callbacks: {
+                    label: (ctx) => ` ${ctx.raw} borrows`
+                }
+            }
+        },
+
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: '#eeeeee',
+                    drawBorder: false
+                },
+                ticks: {
+                    stepSize: 1,
+                    color: '#757575',
+                    font: {
+                        size: 11,
+                        family: 'Roboto'
+                    }
+                }
+            },
+
+            x: {
+                grid: {
+                    display: false
+                },
+                ticks: {
+                    color: '#757575',
+                    font: {
+                        size: 11,
+                        family: 'Roboto'
+                    }
+                }
+            }
+        }
+    }
+});
 
     
 </script>
